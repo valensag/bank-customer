@@ -2,6 +2,7 @@ package com.vobi.bank.repository;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -13,9 +14,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import com.vobi.bank.domain.Customer;
 import com.vobi.bank.domain.DocumentType;
 
+import lombok.extern.slf4j.Slf4j;
+
 
 @SpringBootTest
 @TestMethodOrder(OrderAnnotation.class)
+@Slf4j
 class CustomerRepositoryIT {
 
     @Autowired
@@ -92,6 +96,20 @@ class CustomerRepositoryIT {
     	
     	//Assert
     	 assertFalse(customerOptional.isPresent(),"El customer es nulo no se pudo grabar");
+    }
+    
+    @Test
+    @Order(5)
+    void debeConsultarTodosLosCustomer() {
+    	//Arrange
+    	List<Customer> customers=null;
+    	
+    	//Act
+    	customers=customerRepository.findAll();
+    	customers.forEach(customer->log.info(customer.getName()));
+    	
+    	//Assert
+    	 assertFalse(customers.isEmpty(), "No consultó los Customer");
     }
 
 }
