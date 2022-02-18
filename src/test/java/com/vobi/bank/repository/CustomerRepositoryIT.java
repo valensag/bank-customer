@@ -1,6 +1,9 @@
 package com.vobi.bank.repository;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.Optional;
+
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -63,12 +66,32 @@ class CustomerRepositoryIT {
     	Integer idCustomer=14836554;
     	Customer customer=null;
     	customer=customerRepository.findById(idCustomer).get();
+    	customer.setEnable("N");
     	
     	//Act
     	customer=customerRepository.save(customer);
     	
     	//Assert
     	 assertNotNull(customer,"El customer es nulo no se pudo grabar");
+    }
+    
+    @Test
+    @Order(4)
+    void debeBorrarUnCustomer() {
+    	//Arrange
+    	Integer idCustomer=14836554;
+    	Customer customer=null;
+    	Optional<Customer> customerOptional=null;
+    	
+    	assertTrue(customerRepository.findById(idCustomer).isPresent(), "No encontró el Customer");
+    	customer=customerRepository.findById(idCustomer).get();
+    	
+    	//Act
+    	customerRepository.delete(customer);
+    	customerOptional=customerRepository.findById(idCustomer);    	
+    	
+    	//Assert
+    	 assertFalse(customerOptional.isPresent(),"El customer es nulo no se pudo grabar");
     }
 
 }
